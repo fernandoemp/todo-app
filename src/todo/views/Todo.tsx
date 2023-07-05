@@ -16,14 +16,14 @@ const Todo = () => {
     height: "80vh"
   }
   return (
-    <TodoProvider>
-      <div style={containerTodo}>
-        <TodoTitle></TodoTitle>
-        <TodoInput></TodoInput>
-        <TodoFilter></TodoFilter>
-        <TodoList></TodoList>
-      </div>
-    </TodoProvider>
+    
+    <div style={containerTodo}>
+      <TodoTitle></TodoTitle>
+      <TodoInput></TodoInput>
+      <TodoFilter></TodoFilter>
+      <TodoList></TodoList>
+    </div>
+
   )
 }
 

@@ -1,8 +1,7 @@
 import { CSSProperties } from 'react';
 import './App.css';
 import Todo from './todo/views/Todo';
-import { Provider } from 'react-redux';
-import { store } from './reducers/Store';
+
 
 function App() {
 
@@ -12,10 +11,7 @@ function App() {
 
   return (
     <div className="App App-header">
-      
-      <Provider store={store}>
-        <Todo></Todo>
-      </Provider>
+      <Todo></Todo>
     </div>
   );
 }

@@ -13,7 +13,7 @@ const TodoInput = () => {
     const dispatch = useDispatch();
     const [ newTodoText , setNewTodoText] = useState('');
   
-    const handlerChange = (e: { target: { value: React.SetStateAction<string> }; }) => {
+    const handlerChange = (e: { target: { value: React.SetStateAction<string> } }) => {
         setNewTodoText(e.target.value);
       };
 
