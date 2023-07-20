@@ -1,46 +1,95 @@
-import { TextField } from '@mui/material'
+import { IconButton, TextField } from '@mui/material'
 import React, { CSSProperties, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import AddIcon from '@mui/icons-material/Add';
+import AlertDialog from './AlertDialog';
+import { TaskDialog } from './TaskDialog';
+import { addTodo, updateTodo } from '../../reducers/TodoSlice';
 import { Todo } from '../interfaces/interfaces';
 import { v4 as generateUUID } from 'uuid';
-import { useDispatch } from 'react-redux';
-import { addTodo } from '../../reducers/TodoSlice';
 
-const TodoInput = () => {
+
+export const TodoInput = () => {
     const inputText: CSSProperties = {
-        width: "80%"
+        width: "500px"
+    };
+
+    const addButton: CSSProperties = {
+        display: 'flex',
+        justifyContent: 'center',
+        background: '#1565c0',
+        borderRadius: '5px',
+        color: '#ffffffff'
     };
 
     const dispatch = useDispatch();
-    const [ newTodoText , setNewTodoText] = useState('');
-  
+    const [ newTodoText , setNewTodoText ] = useState('');
+    const [ openAlertDialog, setOpenAlertDialog ] = useState(false);
+    const [ openAddTask, setOpenAddTask ] = useState(false);
+
     const handlerChange = (e: { target: { value: React.SetStateAction<string> } }) => {
         setNewTodoText(e.target.value);
-      };
+    };
 
     const handlerAddTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if(event.key === 'Enter'){
-            event.preventDefault();
-            event.stopPropagation();
-            const newTodo: Todo = {
-                id: generateUUID(),
-                desc: newTodoText,
-                completed: false
+            if (newTodoText !== ""){
+                openDialogAddTask();
             }
-            dispatch(addTodo(newTodo));
-            setNewTodoText('');
+            else {
+                setOpenAlertDialog(true);
+            }
         }
     };
 
+    const openDialogAddTask = () => {
+        setOpenAddTask(true);
+    };
+
+    const handleClose = () => {
+        setOpenAddTask(false);
+    };
+
+    const createNewTask = (desc: string) => {
+        const newTodo: Todo = {
+          id: generateUUID(),
+          desc: desc,
+          completed: false,
+          taskType: 'HOME'
+        };
+        dispatch(addTodo(newTodo));
+        setNewTodoText('');
+      };
+    
+      const updateExistingTask = (updatedTodo: Todo) => {
+        dispatch(updateTodo(updatedTodo));
+        setNewTodoText('');
+      };
+
     return (
-        <TextField 
-            id="outlined-basic" 
-            style={inputText} 
-            label="Ingrese una nueva tarea" 
-            variant="outlined" 
-            value={newTodoText}
-            onKeyDown={handlerAddTodo} 
-            onChange={handlerChange}/>
+        <div style={{display: 'flex'}}>
+            <TextField 
+                id="outlined-basic" 
+                style={inputText} 
+                label="Add a new task" 
+                variant="outlined" 
+                value={newTodoText}
+                onKeyDown={handlerAddTodo} 
+                onChange={handlerChange}/>
+            <IconButton onClick={openDialogAddTask} aria-label="Add task" style={addButton}>
+                <AddIcon></AddIcon>
+            </IconButton>
+            <AlertDialog open={openAlertDialog} handleClose={() => setOpenAlertDialog(false)} title='Error' message={"Es necesario que agregue caracteres"}  />
+            <TaskDialog
+                open={openAddTask}
+                handleClose={handleClose}
+                title='Add Task'
+                task={undefined}
+                isEdit={false}
+                handleAdd={createNewTask}
+                handleUpdate={updateExistingTask}
+            />
+            {/* <AlertDialog open={openDialogValidationDate} handleClose={() => setOpenDialogValidationDate(false)} title='Error' message={"La fecha debe ser igual o posterior al dia actual"}  /> */}
+        </div>
     )
 }
-
-export default TodoInput

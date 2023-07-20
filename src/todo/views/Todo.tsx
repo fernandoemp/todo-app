@@ -1,9 +1,9 @@
 import { CSSProperties } from "react"
 import { TodoList } from "../components/TodoList"
 import TodoTitle from "../components/TodoTitle"
-import TodoProvider from "../context/TodoProvider"
-import TodoInput from "../components/TodoInput"
-import TodoFilter from "../components/TodoFilter"
+import { TodoFilter } from "../components/TodoFilter"
+import { TodoInput } from "../components/TodoInput"
+import { TodoOptionsDelete } from "../components/TodoOptionsDelete"
 
 const Todo = () => {
   const containerTodo: CSSProperties  = {
@@ -22,6 +22,7 @@ const Todo = () => {
       <TodoInput></TodoInput>
       <TodoFilter></TodoFilter>
       <TodoList></TodoList>
+      <TodoOptionsDelete></TodoOptionsDelete>
     </div>
 
   )

@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice, isAction } from '@reduxjs/toolkit';
-import { TodoState } from "../todo/interfaces/interfaces";
+import { Todo, TodoState } from "../todo/interfaces/interfaces";
+import moment from 'moment';
 
 const initialState: TodoState = {
     todoCount: 2,
@@ -7,12 +8,16 @@ const initialState: TodoState = {
         {   
             id: "1",
             desc: "Hacer las compras",
-            completed: false
+            completed: false,
+            taskType: "HOME",
+            date: moment()
         },
         {   
             id: "2",
             desc: "Estudiar",
-            completed: true
+            completed: true,
+            taskType: "WORK",
+            date: moment()
         }
     ],
     completed: 0,
@@ -29,8 +34,21 @@ const TodoSlice = createSlice({
       state.todos = [ ...state.todos,  {   
         id: action.payload.id,
         desc: action.payload.desc,
-        completed: action.payload.completed
+        completed: action.payload.completed,
+        taskType: action.payload.taskType,
+        date: action.payload.date
+        
     }];
+    },
+    updateTodo: (state, action: PayloadAction<Todo>) => {
+        state.todos = state.todos.map((todo) => {
+          if (todo.id === action.payload.id) {
+            return {
+              ...action.payload
+            };
+          }
+          return todo;
+        });
     },
     deleteTodo: (state, action) => {
         state.todos = state.todos.filter((todo) => todo.id !== action.payload)
@@ -43,11 +61,17 @@ const TodoSlice = createSlice({
             return todo;
         });
     },
-    filterTodo: (state, action: PayloadAction<'all' | 'done' | 'todo'>) => {
+    filterTodo: (state, action: PayloadAction<string>) => {
         state.filter = action.payload;
+    },
+    deleteAllDoneTodo: (state, action) => {
+        state.todos = state.todos.filter((todo) => !todo.completed)
+    },
+    deleteAllTodo: (state, action) => {
+        state.todos = [];
     }
   },
 });
 
-export const { addTodo, deleteTodo, toggleTodo, filterTodo } = TodoSlice.actions;
+export const { addTodo, updateTodo, deleteTodo, toggleTodo, filterTodo,  deleteAllDoneTodo, deleteAllTodo } = TodoSlice.actions;
 export default TodoSlice.reducer;
