@@ -28,7 +28,10 @@ export const TodoInput = () => {
     const [ openAddTask, setOpenAddTask ] = useState(false);
 
     const handlerChange = (e: { target: { value: React.SetStateAction<string> } }) => {
-        setNewTodoText(e.target.value);
+        const inputValue = e.target.value;
+        if (inputValue.length <= 50) {
+          setNewTodoText(inputValue);
+        }
     };
 
     const handlerAddTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
